@@ -4,6 +4,7 @@ import { PackagesComponent } from './pages/packages/packages.component';
 import { PackageComponent } from './pages/package/package.component';
 import { SearchComponent } from './pages/search/search.component';
 import { GuideComponent } from './pages/guide/guide.component';
+import { CategoryComponent } from './pages/category/category.component';
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'categories/:category',
-    component: PackagesComponent,
+    component: CategoryComponent,
   },
   {
     path: 'package/:package',

@@ -8,7 +8,7 @@
         [nzDescription]="package.description"
       ></nz-card-meta>
       <ng-template #titleLink>
-        <a [routerLink]="getPackageLink(package.name)">
+        <a routerLink="/package/{{ package.id }}">
           {{ package.name }}
         </a>
       </ng-template>

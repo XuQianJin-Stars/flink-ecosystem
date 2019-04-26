@@ -8,13 +8,4 @@ import { PackageList } from 'src/app/interfaces/package-list';
 })
 export class PackageListComponent {
   @Input() packages: PackageList;
-
-  public getPackageLink(name: string): string {
-    const link = name
-      .toLowerCase()
-      .split(' ')
-      .join('-');
-
-    return `/package/${link}`;
-  }
 }

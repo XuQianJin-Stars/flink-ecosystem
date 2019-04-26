@@ -7,16 +7,14 @@ const user = {
   email: { faker: 'internet.email' },
 };
 
-module.exports = {
-  route(server) {
-    server.route({
-      method: 'GET',
-      path: '/api/v1/user',
-      handler: () =>
-        mocker()
-          .schema('user', user, 1)
-          .build()
-          .then(data => data.user[0]),
-    });
-  },
+module.exports = function(server) {
+  server.route({
+    method: 'GET',
+    path: '/api/v1/user',
+    handler: () =>
+      mocker()
+        .schema('user', user, 1)
+        .build()
+        .then(data => data.user[0]),
+  });
 };

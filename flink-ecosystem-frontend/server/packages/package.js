@@ -1,11 +1,18 @@
 const mocker = require('mocker-data-generator').default;
+const slugify = require('slugify');
+
+const releases = require('./releases');
 
 const random = outOf => {
   return Math.floor(Math.random() * outOf + 1);
 };
 
 const package = {
-  id: { incrementalId: 0 },
+  id: {
+    function() {
+      return slugify(this.faker.commerce.productName());
+    },
+  },
   name: { faker: 'commerce.productName' },
   description: { faker: 'lorem.paragraph' },
   readme: { faker: 'lorem.paragraphs(4)' },
@@ -33,47 +40,50 @@ const package = {
   owner: { faker: 'internet.userName' },
 };
 
-module.exports = {
-  route(server) {
-    server.route({
-      method: 'GET',
-      path: '/api/v1/packages',
-      handler: () =>
-        mocker()
-          .schema('packages', package, 30)
-          .build()
-          .then(data => ({ items: data.packages })),
-    });
+module.exports = function(server) {
+  server.route({
+    method: 'get',
+    path: '/api/v1/packages',
+    handler: request => {
+      const { query = '' } = request.query;
+      const count = !query ? 30 : query.includes('tag:') ? 15 : 5;
 
-    server.route({
-      method: ['GET', 'PATCH', 'DELETE'],
-      path: '/api/v1/packages/{package}',
-      handler: request => {
-        switch (request.method) {
-          case 'PATCH':
-          case 'DELETE':
-            return {};
-          case 'GET':
-            return mocker()
-              .schema('packages', package, 1)
-              .build()
-              .then(data => data.packages[0]);
-          default:
-            throw new Error();
-        }
-      },
-    });
+      return mocker()
+        .schema('items', package, count)
+        .build();
+    },
+  });
 
-    server.route({
-      method: 'POST',
-      path: '/api/v1/packages/{package}/upvote',
-      handler: (request, h) => h.response({}).code(201),
-    });
+  server.route({
+    method: ['get', 'patch', 'delete'],
+    path: '/api/v1/packages/{package}',
+    handler: request => {
+      switch (request.method) {
+        case 'patch':
+        case 'delete':
+          return {};
+        case 'get':
+          return mocker()
+            .schema('packages', package, 1)
+            .build()
+            .then(data => data.packages[0]);
+        default:
+          throw new Error();
+      }
+    },
+  });
 
-    server.route({
-      method: 'POST',
-      path: '/api/v1/packages/{package}/downvote',
-      handler: (request, h) => h.response({}).code(201),
-    });
-  },
+  server.route({
+    method: 'post',
+    path: '/api/v1/packages/{package}/upvote',
+    handler: (request, h) => h.response({}).code(201),
+  });
+
+  server.route({
+    method: 'post',
+    path: '/api/v1/packages/{package}/downvote',
+    handler: (request, h) => h.response({}).code(201),
+  });
+
+  [releases].map(route => route(server));
 };

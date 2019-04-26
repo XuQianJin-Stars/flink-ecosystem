@@ -15,7 +15,12 @@ export class PackagesService {
   }
 
   getSearchPackages(query: string): Observable<PackageList> {
-    const url = `/api/v1/search?query=${query}`;
+    const url = `/api/v1/packages?query=${query}`;
+    return this.http.get<PackageList>(url);
+  }
+
+  getCategoryPackages(category: string): Observable<PackageList> {
+    const url = `/api/v1/packages?query=tag:${category}`;
     return this.http.get<PackageList>(url);
   }
 }

@@ -13,8 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 export class PackagesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   packages: Package[] = [];
-  title = '';
-  defaultTitle = 'Most Popular Packages';
+  title = 'Most Popular Packages';
 
   constructor(
     private packagesService: PackagesService,
@@ -22,14 +21,15 @@ export class PackagesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.route.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(({ category }) => {
-        this.getPackages(category);
-        this.title = !!category
-          ? `Packages tagged with "${category}"`
-          : this.defaultTitle;
-      });
+    // this.route.params
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(({ category }) => {
+    //     ;
+    //     this.title = !!category
+    //       ? `Packages tagged with "${category}"`
+    //       : this.defaultTitle;
+    //   });
+    this.getPackages();
   }
 
   ngOnDestroy(): void {
@@ -37,9 +37,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private getPackages(category?: string): void {
+  private getPackages(): void {
     this.packagesService
-      .getPackages(category)
+      .getPackages()
       .subscribe(data => (this.packages = data.items || []));
   }
 }

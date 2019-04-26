@@ -13,6 +13,7 @@ import { PackageListComponent } from './share/package-list/package-list.componen
 import { SidebarComponent } from './share/sidebar/sidebar.component';
 import { GuideComponent } from './pages/guide/guide.component';
 import { PageContentComponent } from './share/page-content/page-content.component';
+import { CategoryComponent } from './pages/category/category.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { PageContentComponent } from './share/page-content/page-content.componen
     SidebarComponent,
     GuideComponent,
     PageContentComponent,
+    CategoryComponent,
   ],
   imports: [
     BrowserModule,

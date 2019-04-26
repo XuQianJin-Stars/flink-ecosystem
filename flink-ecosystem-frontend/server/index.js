@@ -53,9 +53,7 @@ const init = async () => {
 
   await server.register(require('inert'));
 
-  [user, tags, package].map(module => {
-    module.route(server);
-  });
+  [user, tags, package].map(route => route(server));
 
   server.route({
     method: 'GET',
