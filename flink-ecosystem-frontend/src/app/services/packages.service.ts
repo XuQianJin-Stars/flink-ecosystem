@@ -7,10 +7,8 @@ import { PackageList } from '../interfaces/package-list';
 export class PackagesService {
   constructor(protected http: HttpClient) {}
 
-  getPackages(category?: string): Observable<PackageList> {
-    const base = '/api/v1/packages';
-    const url = !!category ? `${base}/${category}` : base;
-
+  getPackages(): Observable<PackageList> {
+    const url = '/api/v1/packages';
     return this.http.get<PackageList>(url);
   }
 
